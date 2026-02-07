@@ -1,1 +1,35 @@
 @import "tailwindcss";
+
+/* Tailwind v4 Configuration */
+@theme {
+    /* Dark mode variant */
+    --color-everforest-bg: #2b3339;
+    --color-everforest-bg-hard: #272e33;
+    --color-everforest-bg-soft: #323c41;
+    --color-everforest-fg: #d3c6aa;
+    --color-everforest-red: #e67e80;
+    --color-everforest-orange: #e69875;
+    --color-everforest-yellow: #dbbc7f;
+    --color-everforest-green: #a7c080;
+    --color-everforest-aqua: #83c092;
+    --color-everforest-blue: #7fbbb3;
+    --color-everforest-purple: #d699b6;
+
+    /* Magenta palette for light mode */
+    --color-magenta-50: #fdf2f8;
+    --color-magenta-100: #fce7f3;
+    --color-magenta-200: #fbcfe8;
+    --color-magenta-300: #f9a8d4;
+    --color-magenta-400: #f472b6;
+    --color-magenta-500: #ec4899;
+    --color-magenta-600: #db2777;
+    --color-magenta-700: #be185d;
+    --color-magenta-800: #9d174d;
+    --color-magenta-900: #831843;
+
+    /* Font family */
+    --font-family-sans: Inter, sans-serif;
+}
+
+/* Enable dark mode with .dark class */
+@variant dark (&:where(.dark, .dark *));
