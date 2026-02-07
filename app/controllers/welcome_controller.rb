@@ -16,7 +16,7 @@ class WelcomeController < ApplicationController
     @recurring_donations_count = RecurringDonation.count
     
     # Household count (accounts that are households)
-    @household_count = Account.where(account_type: 'Household').count rescue 0
+    @household_count = Account.where(account_type: :household).count rescue 0
     
     # Donation type breakdown
     @donation_types = Donation.group(:donation_type).count rescue {}
