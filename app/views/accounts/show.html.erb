@@ -1,4 +1,287 @@
-<div>
-  <h1 class="font-bold text-4xl">Accounts#show</h1>
-  <p>Find me in app/views/accounts/show.html.erb</p>
+<% content_for :title, "#{@account.name} - NPSP CRM" %>
+
+<!-- Page Header -->
+<div class="mb-6 flex justify-between items-start">
+  <div>
+    <div class="flex items-center space-x-3">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-everforest-fg"><%= @account.name %></h1>
+      <span class="px-3 py-1 rounded-full text-sm font-medium <%= @account.household? ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:bg-opacity-30 dark:text-purple-300' : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:bg-opacity-30 dark:text-blue-300' %>">
+        <%= @account.account_type.titleize %>
+      </span>
+    </div>
+    <% if @account.parent_account.present? %>
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        Subsidiary of <%= link_to @account.parent_account.name, account_path(@account.parent_account), class: "text-magenta-600 dark:text-everforest-aqua hover:underline" %>
+      </p>
+    <% end %>
+  </div>
+  <div class="flex space-x-3">
+    <%= link_to edit_account_path(@account), class: "inline-flex items-center px-4 py-2 border border-gray-300 dark:border-everforest-bg-soft shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-everforest-bg hover:bg-gray-50 dark:hover:bg-everforest-bg-soft focus:outline-none" do %>
+      <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+      </svg>
+      Edit
+    <% end %>
+    <%= button_to account_path(@account), method: :delete, data: { confirm: 'Are you sure?' }, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 focus:outline-none" do %>
+      <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+      </svg>
+      Delete
+    <% end %>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+  <!-- Left Column: Main Information -->
+  <div class="lg:col-span-2 space-y-6">
+    <!-- Contact Information Card -->
+    <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+      <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Contact Information</h2>
+      </div>
+      <div class="px-6 py-4">
+        <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+          <% if @account.phone.present? %>
+            <div>
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Phone</dt>
+              <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg">
+                <a href="tel:<%= @account.phone %>" class="text-magenta-600 dark:text-everforest-aqua hover:underline">
+                  <%= @account.phone %>
+                </a>
+              </dd>
+            </div>
+          <% end %>
+
+          <% if @account.fax.present? %>
+            <div>
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Fax</dt>
+              <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg"><%= @account.fax %></dd>
+            </div>
+          <% end %>
+
+          <% if @account.website.present? %>
+            <div class="sm:col-span-2">
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Website</dt>
+              <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg">
+                <a href="<%= @account.website %>" target="_blank" class="text-magenta-600 dark:text-everforest-aqua hover:underline">
+                  <%= @account.website %>
+                </a>
+              </dd>
+            </div>
+          <% end %>
+
+          <% if @account.billing_street.present? || @account.billing_city.present? %>
+            <div class="sm:col-span-2">
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Billing Address</dt>
+              <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg">
+                <% if @account.billing_street.present? %>
+                  <%= @account.billing_street %><br>
+                <% end %>
+                <%= [@account.billing_city, @account.billing_state].compact.join(', ') %>
+                <%= @account.billing_postal_code %>
+                <% if @account.billing_country.present? && @account.billing_country != 'United States' %>
+                  <br><%= @account.billing_country %>
+                <% end %>
+              </dd>
+            </div>
+          <% end %>
+        </dl>
+      </div>
+    </div>
+
+    <!-- Donation Summary Card -->
+    <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+      <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Donation Summary</h2>
+      </div>
+      <div class="px-6 py-4">
+        <dl class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+          <div>
+            <dt class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Total Gifts</dt>
+            <dd class="mt-1 text-2xl font-semibold text-everforest-green dark:text-everforest-green">
+              <%= number_to_currency(@account.total_gifts || 0) %>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase"># of Gifts</dt>
+            <dd class="mt-1 text-2xl font-semibold text-gray-900 dark:text-everforest-fg">
+              <%= @account.number_of_gifts || 0 %>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Average Gift</dt>
+            <dd class="mt-1 text-2xl font-semibold text-gray-900 dark:text-everforest-fg">
+              <%= number_to_currency(@account.average_gift || 0) %>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">First Gift</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg">
+              <%= @account.first_gift_date&.strftime('%b %Y') || '-' %>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Last Gift</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg">
+              <%= @account.last_gift_date&.strftime('%b %Y') || '-' %>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">This Year</dt>
+            <dd class="mt-1 text-sm font-semibold text-everforest-green dark:text-everforest-green">
+              <%= number_to_currency(@account.total_gifts_this_year || 0) %>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <!-- Household Members (for Households) -->
+    <% if @account.household? && @contacts.any? %>
+      <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft flex justify-between items-center">
+          <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Household Members</h2>
+          <%= link_to "View All", contacts_path(account_id: @account.id), class: "text-sm text-magenta-600 dark:text-everforest-aqua hover:underline" %>
+        </div>
+        <div class="divide-y divide-gray-200 dark:divide-everforest-bg-soft">
+          <% @contacts.each do |contact| %>
+            <div class="px-6 py-4 flex justify-between items-center hover:bg-gray-50 dark:hover:bg-everforest-bg-soft">
+              <div>
+                <p class="text-sm font-medium text-gray-900 dark:text-everforest-fg">
+                  <%= contact.full_name %>
+                </p>
+                <% if contact.email.present? %>
+                  <p class="text-sm text-gray-500 dark:text-gray-400"><%= contact.email %></p>
+                <% end %>
+              </div>
+              <%= link_to 'View', contact_path(contact), class: "text-magenta-600 dark:text-everforest-aqua hover:underline text-sm" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Recent Donations -->
+    <% if @recent_donations.any? %>
+      <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft flex justify-between items-center">
+          <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Recent Donations</h2>
+          <%= link_to "View All", donations_path(account_id: @account.id), class: "text-sm text-magenta-600 dark:text-everforest-aqua hover:underline" %>
+        </div>
+        <div class="divide-y divide-gray-200 dark:divide-everforest-bg-soft">
+          <% @recent_donations.each do |donation| %>
+            <div class="px-6 py-4 flex justify-between items-center hover:bg-gray-50 dark:hover:bg-everforest-bg-soft">
+              <div>
+                <p class="text-sm font-medium text-gray-900 dark:text-everforest-fg">
+                  <%= number_to_currency(donation.amount) %>
+                </p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                  <%= donation.donation_date&.strftime('%b %d, %Y') || 'Date TBD' %>
+                </p>
+              </div>
+              <%= link_to 'View', donation_path(donation), class: "text-magenta-600 dark:text-everforest-aqua hover:underline text-sm" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Right Column: Additional Details -->
+  <div class="space-y-6">
+    <!-- Organization Details (for Organizations) -->
+    <% if @account.organization? %>
+      <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+          <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Organization Details</h2>
+        </div>
+        <div class="px-6 py-4 space-y-4">
+          <% if @account.industry.present? %>
+            <div>
+              <dt class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Industry</dt>
+              <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg"><%= @account.industry %></dd>
+            </div>
+          <% end %>
+
+          <% if @account.annual_revenue.present? %>
+            <div>
+              <dt class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Annual Revenue</dt>
+              <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg">
+                <%= number_to_currency(@account.annual_revenue) %>
+              </dd>
+            </div>
+          <% end %>
+
+          <% if @account.number_of_employees.present? %>
+            <div>
+              <dt class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Employees</dt>
+              <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg">
+                <%= number_with_delimiter(@account.number_of_employees) %>
+              </dd>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Household Greetings (for Households) -->
+    <% if @account.household? && (@account.formal_greeting.present? || @account.informal_greeting.present?) %>
+      <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+          <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Greetings</h2>
+        </div>
+        <div class="px-6 py-4 space-y-4">
+          <% if @account.formal_greeting.present? %>
+            <div>
+              <dt class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Formal</dt>
+              <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg"><%= @account.formal_greeting %></dd>
+            </div>
+          <% end %>
+
+          <% if @account.informal_greeting.present? %>
+            <div>
+              <dt class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Informal</dt>
+              <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg"><%= @account.informal_greeting %></dd>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Recurring Donations Card -->
+    <% if @recurring_donations.any? %>
+      <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+          <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Recurring Donations</h2>
+        </div>
+        <div class="px-6 py-4 space-y-3">
+          <% @recurring_donations.each do |rd| %>
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-sm font-medium text-everforest-green dark:text-everforest-green">
+                  <%= number_to_currency(rd.amount) %>
+                </p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                  <%= rd.frequency&.titleize || 'Monthly' %>
+                </p>
+              </div>
+              <%= link_to 'View', recurring_donation_path(rd), class: "text-xs text-magenta-600 dark:text-everforest-aqua hover:underline" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Notes Card -->
+    <% if @account.description.present? %>
+      <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+          <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Notes</h2>
+        </div>
+        <div class="px-6 py-4">
+          <p class="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap"><%= @account.description %></p>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>

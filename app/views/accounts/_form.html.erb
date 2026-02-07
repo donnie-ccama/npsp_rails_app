@@ -1,0 +1,232 @@
+<%= form_with(model: account, local: true, class: "space-y-8") do |f| %>
+  <% if account.errors.any? %>
+    <div class="rounded-md bg-red-50 dark:bg-red-900 dark:bg-opacity-20 p-4 mb-4">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-red-400 dark:text-red-300" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800 dark:text-red-200">
+            <%= pluralize(account.errors.count, "error") %> prohibited this account from being saved:
+          </h3>
+          <div class="mt-2 text-sm text-red-700 dark:text-red-300">
+            <ul class="list-disc pl-5 space-y-1">
+              <% account.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Basic Information Section -->
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Basic Information</h3>
+    </div>
+    <div class="px-6 py-4 space-y-4">
+      <div>
+        <%= f.label :name, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+        <span class="text-red-500">*</span>
+        <%= f.text_field :name, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm", required: true %>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <%= f.label :account_type, "Type", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <span class="text-red-500">*</span>
+          <%= f.select :account_type, Account.account_types.keys.map { |k| [k.titleize, k] }, {}, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+
+        <div>
+          <%= f.label :parent_account_id, "Parent Account", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">For subsidiaries or branches</p>
+          <%= f.collection_select :parent_account_id, @parent_accounts, :id, :name, { include_blank: "None" }, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Information Section -->
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Contact Information</h3>
+    </div>
+    <div class="px-6 py-4 space-y-4">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div>
+          <%= f.label :phone, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.telephone_field :phone, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+
+        <div>
+          <%= f.label :fax, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.telephone_field :fax, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+
+        <div>
+          <%= f.label :website, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.url_field :website, placeholder: "https://example.com", class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Billing Address Section -->
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Billing Address</h3>
+    </div>
+    <div class="px-6 py-4 space-y-4">
+      <div>
+        <%= f.label :billing_street, "Street", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+        <%= f.text_area :billing_street, rows: 2, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <%= f.label :billing_city, "City", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.text_field :billing_city, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+        <div>
+          <%= f.label :billing_state, "State", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.text_field :billing_state, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <%= f.label :billing_postal_code, "Postal Code", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.text_field :billing_postal_code, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+        <div>
+          <%= f.label :billing_country, "Country", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.text_field :billing_country, value: f.object.billing_country || "United States", class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shipping Address Section -->
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft flex justify-between items-center">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Shipping Address</h3>
+      <button type="button" onclick="copyBillingToShipping()" class="text-sm text-magenta-600 dark:text-everforest-aqua hover:underline">
+        Copy from Billing
+      </button>
+    </div>
+    <div class="px-6 py-4 space-y-4">
+      <div>
+        <%= f.label :shipping_street, "Street", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+        <%= f.text_area :shipping_street, rows: 2, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <%= f.label :shipping_city, "City", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.text_field :shipping_city, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+        <div>
+          <%= f.label :shipping_state, "State", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.text_field :shipping_state, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <%= f.label :shipping_postal_code, "Postal Code", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.text_field :shipping_postal_code, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+        <div>
+          <%= f.label :shipping_country, "Country", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.text_field :shipping_country, value: f.object.shipping_country || "United States", class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Organization Details Section (shown for Organizations only) -->
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft" data-account-type-section="organization">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Organization Details</h3>
+    </div>
+    <div class="px-6 py-4 space-y-4">
+      <div>
+        <%= f.label :industry, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+        <%= f.text_field :industry, placeholder: "e.g., Technology, Healthcare, Education", class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <%= f.label :annual_revenue, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.number_field :annual_revenue, step: 0.01, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+        <div>
+          <%= f.label :number_of_employees, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.number_field :number_of_employees, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Household Greetings Section (shown for Households only) -->
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft" data-account-type-section="household">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Household Greetings</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400">Auto-generated from household members</p>
+    </div>
+    <div class="px-6 py-4 space-y-4">
+      <div>
+        <%= f.label :formal_greeting, "Formal Greeting", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+        <%= f.text_field :formal_greeting, placeholder: "e.g., Mr. and Mrs. John Smith", class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+      <div>
+        <%= f.label :informal_greeting, "Informal Greeting", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+        <%= f.text_field :informal_greeting, placeholder: "e.g., John and Jane", class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes Section -->
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Notes</h3>
+    </div>
+    <div class="px-6 py-4">
+      <%= f.label :description, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+      <%= f.text_area :description, rows: 4, placeholder: "Additional notes or information about this account", class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+    </div>
+  </div>
+
+  <!-- Form Actions -->
+  <div class="flex justify-end space-x-3">
+    <%= link_to "Cancel", accounts_path, class: "inline-flex items-center px-4 py-2 border border-gray-300 dark:border-everforest-bg-soft shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-everforest-bg hover:bg-gray-50 dark:hover:bg-everforest-bg-soft focus:outline-none" %>
+    <%= f.submit class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-magenta-600 hover:bg-magenta-700 dark:bg-everforest-green dark:hover:bg-everforest-aqua focus:outline-none cursor-pointer" %>
+  </div>
+<% end %>
+
+<script>
+  function copyBillingToShipping() {
+    document.getElementById('account_shipping_street').value = document.getElementById('account_billing_street').value;
+    document.getElementById('account_shipping_city').value = document.getElementById('account_billing_city').value;
+    document.getElementById('account_shipping_state').value = document.getElementById('account_billing_state').value;
+    document.getElementById('account_shipping_postal_code').value = document.getElementById('account_billing_postal_code').value;
+    document.getElementById('account_shipping_country').value = document.getElementById('account_billing_country').value;
+  }
+
+  // Show/hide sections based on account type
+  document.addEventListener('DOMContentLoaded', function() {
+    const accountTypeSelect = document.getElementById('account_account_type');
+    if (accountTypeSelect) {
+      accountTypeSelect.addEventListener('change', toggleSections);
+      toggleSections(); // Run on load
+    }
+  });
+
+  function toggleSections() {
+    const accountType = document.getElementById('account_account_type').value;
+    document.querySelectorAll('[data-account-type-section]').forEach(section => {
+      const sectionType = section.getAttribute('data-account-type-section');
+      section.style.display = (sectionType === accountType) ? 'block' : 'none';
+    });
+  }
+</script>
