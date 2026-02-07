@@ -13,6 +13,47 @@
   <% end %>
 </div>
 
+<!-- Filter Form -->
+<div class="mb-6 bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft p-4">
+  <%= form_with url: contacts_path, method: :get, local: true, class: "space-y-4" do |f| %>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+      <div>
+        <%= f.label :search, "Search by name or email", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+        <%= f.text_field :search, value: params[:search], placeholder: "e.g., John Doe", class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+      
+      <div>
+        <%= f.label :account_id, "Account", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+        <%= f.select :account_id, options_from_collection_for_select(@accounts, :id, :name, params[:account_id]), { include_blank: "All Accounts" }, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+      
+      <div class="flex items-end">
+        <label class="flex items-center">
+          <%= f.check_box :do_not_contact, {}, "1", nil, class: "h-4 w-4 text-magenta-600 focus:ring-magenta-500 border-gray-300 rounded" %>
+          <span class="ml-2 text-sm text-gray-900 dark:text-everforest-fg">Do Not Contact Only</span>
+        </label>
+      </div>
+      
+      <div class="flex items-end">
+        <label class="flex items-center">
+          <%= f.check_box :deceased, {}, "1", nil, class: "h-4 w-4 text-magenta-600 focus:ring-magenta-500 border-gray-300 rounded" %>
+          <span class="ml-2 text-sm text-gray-900 dark:text-everforest-fg">Deceased Only</span>
+        </label>
+      </div>
+    </div>
+    
+    <div class="flex items-center space-x-2">
+      <%= f.submit "Apply Filters", class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-magenta-600 hover:bg-magenta-700 dark:bg-everforest-green dark:hover:bg-everforest-aqua focus:outline-none cursor-pointer" %>
+      <%= link_to "Clear Filters", contacts_path, class: "inline-flex items-center px-4 py-2 border border-gray-300 dark:border-everforest-bg-soft shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-everforest-bg hover:bg-gray-50 dark:hover:bg-everforest-bg-soft" %>
+      <% if params[:search].present? || params[:account_id].present? || params[:do_not_contact].present? || params[:deceased].present? %>
+        <span class="text-sm text-gray-600 dark:text-gray-400">
+          <%= pluralize(@contacts.total_count, 'result') %> found
+        </span>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
 <!-- Contacts Table -->
 <div class="bg-white dark:bg-everforest-bg-hard shadow overflow-hidden rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
   <% if @contacts.any? %>
@@ -70,3 +111,10 @@
     </div>
   <% end %>
 </div>
+
+<!-- Pagination -->
+<% if @contacts.total_ pages > 1 %>
+  <div class="mt-6 flex justify-center">
+    <%= paginate @contacts, params: params.permit(:search, :account_id, :do_not_contact, :deceased) %>
+  </div>
+<% end %>

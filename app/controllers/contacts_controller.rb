@@ -3,7 +3,31 @@ class ContactsController < ApplicationController
   before_action :load_accounts, only: [:new, :edit, :create, :update]
 
   def index
-    @contacts = Contact.includes(:account).order(created_at: :desc).page(params[:page]).per(25)
+    @contacts = Contact.includes(:account).order(created_at: :desc)
+    
+    # Apply filters
+    if params[:search].present?
+      search_term = "%#{params[:search]}%"
+      @contacts = @contacts.where(
+        "first_name ILIKE ? OR last_name ILIKE ? OR personal_email ILIKE ? OR work_email ILIKE ?",
+        search_term, search_term, search_term, search_term
+      )
+    end
+    
+    if params[:account_id].present?
+      @contacts = @contacts.where(account_id: params[:account_id])
+    end
+    
+    if params[:do_not_contact] == "1"
+      @contacts = @contacts.where(do_not_contact: true)
+    end
+    
+    if params[:deceased] == "1"
+      @contacts = @contacts.where(deceased: true)
+    end
+    
+    @contacts = @contacts.page(params[:page]).per(25)
+    @accounts = Account.order(:name) # For filter dropdown
   end
 
   def show

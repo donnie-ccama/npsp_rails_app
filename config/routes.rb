@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "welcome#index"
 
+  # Global Search
+  get "search", to: "search#index", as: :search
+
   # NPSP Model Routes
   resources :contacts
   resources :accounts

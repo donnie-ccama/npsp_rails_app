@@ -1,0 +1,81 @@
+<% content_for :title, "Search Results - NPSP CRM" %>
+
+<div class="mb-6">
+  <h1 class="text-2xl font-bold text-gray-900 dark:text-everforest-fg">
+    Search Results for "<%= @query %>"
+  </h1>
+  <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+    Found <%= @contacts.count %> contact(s) and <%= @accounts.count %> account(s)
+  </p>
+</div>
+
+<% if @contacts.any? %>
+  <div class="mb-8">
+    <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg mb-4">Contacts</h2>
+    <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft overflow-hidden">
+      <ul class="divide-y divide-gray-200 dark:divide-everforest-bg-soft">
+        <% @contacts.each do |contact| %>
+          <li class="px-6 py-4 hover:bg-gray-50 dark:hover:bg-everforest-bg-soft">
+            <%= link_to contact_path(contact), class: "block" do %>
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-medium text-gray-900 dark:text-everforest-fg">
+                    <%= contact.full_name %>
+                  </p>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                    <%= contact.personal_email || contact.work_email || "No email" %>
+                    <% if contact.account.present? %>
+                      · <%= contact.account.name %>
+                    <% end %>
+                  </p>
+                </div>
+                <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </div>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>
+
+<% if @accounts.any? %>
+  <div class="mb-8">
+    <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg mb-4">Accounts</h2>
+    <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft overflow-hidden">
+      <ul class="divide-y divide-gray-200 dark:divide-everforest-bg-soft">
+        <% @accounts.each do |account| %>
+          <li class="px-6 py-4 hover:bg-gray-50 dark:hover:bg-everforest-bg-soft">
+            <%= link_to account_path(account), class: "block" do %>
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-medium text-gray-900 dark:text-everforest-fg">
+                    <%= account.name %>
+                  </p>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                    <%= account.account_type&.titleize || "Unknown Type" %>
+                  </p>
+                </div>
+                <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </div>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>
+
+<% if @contacts.empty? && @accounts.empty? %>
+  <div class="text-center py-12">
+    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+    </svg>
+    <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-everforest-fg">No results found</h3>
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Try searching with different keywords</p>
+  </div>
+<% end %>
