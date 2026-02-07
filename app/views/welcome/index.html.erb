@@ -1,8 +1,80 @@
-<h1>NPSP Rails App</h1>
-<p>Welcome! The application is up and running.</p>
-<hr>
-<h3>Database Status: <%= @db_status %></h3>
-<% if @db_error %>
-  <p style="color: red;"><strong>Error:</strong> <%= @db_error %></p>
-  <p><em>Check your Render Environment Variables (DATABASE_URL) and ensure the password is correct and SSL is enabled (?sslmode=require).</em></p>
-<% end %>
+<% content_for :title, "Dashboard - NPSP CRM" %>
+
+<h1 class="text-2xl font-bold text-gray-900 dark:text-everforest-fg">Dashboard</h1>
+
+<div class="mt-4 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+  <!-- Card 1 -->
+  <div class="bg-white dark:bg-everforest-bg-hard overflow-hidden shadow rounded-lg border border-gray-100 dark:border-everforest-bg-soft">
+    <div class="p-5">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <svg class="h-6 w-6 text-gray-400 dark:text-everforest-aqua" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        </div>
+        <div class="ml-5 w-0 flex-1">
+          <dl>
+            <dt class="text-sm font-medium text-gray-500 truncate dark:text-gray-400">Total Contacts</dt>
+            <dd class="text-lg font-medium text-gray-900 dark:text-everforest-fg">
+              <%= Contact.count %>
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="bg-white dark:bg-everforest-bg-hard overflow-hidden shadow rounded-lg border border-gray-100 dark:border-everforest-bg-soft">
+    <div class="p-5">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <svg class="h-6 w-6 text-gray-400 dark:text-everforest-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div class="ml-5 w-0 flex-1">
+          <dl>
+            <dt class="text-sm font-medium text-gray-500 truncate dark:text-gray-400">Total Donations</dt>
+            <dd class="text-lg font-medium text-gray-900 dark:text-everforest-fg">
+              <%= number_to_currency(Donation.sum(:amount)) %>
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+   <!-- Card 3 -->
+  <div class="bg-white dark:bg-everforest-bg-hard overflow-hidden shadow rounded-lg border border-gray-100 dark:border-everforest-bg-soft">
+    <div class="p-5">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <svg class="h-6 w-6 text-gray-400 dark:text-everforest-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+          </svg>
+        </div>
+        <div class="ml-5 w-0 flex-1">
+          <dl>
+            <dt class="text-sm font-medium text-gray-500 truncate dark:text-gray-400">Recurring Donations</dt>
+            <dd class="text-lg font-medium text-gray-900 dark:text-everforest-fg">
+               <%= RecurringDonation.count %>
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-8">
+  <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Database Status</h2>
+  <div class="mt-2 bg-white dark:bg-everforest-bg-hard shadow overflow-hidden rounded-md p-4 border border-gray-100 dark:border-everforest-bg-soft">
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        Status: <span class="<%= @db_error ? 'text-red-600 dark:text-everforest-red' : 'text-green-600 dark:text-everforest-green' %> font-medium"><%= @db_status %></span>
+      </p>
+      <% if @db_error %>
+        <p class="mt-1 text-sm text-red-600 dark:text-everforest-red"><%= @db_error %></p>
+      <% end %>
+  </div>
+</div>
