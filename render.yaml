@@ -1,8 +1,3 @@
-databases:
-  - name: npsp_rails_db
-    databaseName: npsp_rails_production
-    user: npsp_rails
-
 services:
   - type: web
     name: npsp-rails-app
@@ -11,9 +6,7 @@ services:
     startCommand: "bundle exec puma -C config/puma.rb"
     envVars:
       - key: DATABASE_URL
-        fromDatabase:
-          name: npsp_rails_db
-          property: connectionString
+        sync: false
       - key: SECRET_KEY_BASE
         sync: false
       - key: RAILS_LOG_TO_STDOUT
