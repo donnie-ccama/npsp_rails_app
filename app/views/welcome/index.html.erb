@@ -1,3 +1,8 @@
 <h1>NPSP Rails App</h1>
 <p>Welcome! The application is up and running.</p>
-<p>Database connection: <%= ActiveRecord::Base.connection.active? ? "Connected" : "Not connected" %></p>
+<hr>
+<h3>Database Status: <%= @db_status %></h3>
+<% if @db_error %>
+  <p style="color: red;"><strong>Error:</strong> <%= @db_error %></p>
+  <p><em>Check your Render Environment Variables (DATABASE_URL) and ensure the password is correct and SSL is enabled (?sslmode=require).</em></p>
+<% end %>
