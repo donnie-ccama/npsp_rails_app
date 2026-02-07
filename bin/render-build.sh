@@ -3,7 +3,7 @@
 set -o errexit
 
 bundle install
-bin/rails tailwindcss:build
+bin/rails tailwindcss:build -c tailwind.config.js
 bin/rails assets:precompile
 bin/rails assets:clean
 bin/rails db:migrate
