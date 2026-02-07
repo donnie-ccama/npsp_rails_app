@@ -1,0 +1,251 @@
+<%= form_with(model: contact, local: true, class: "space-y-8") do |f| %>
+  <% if contact.errors.any? %>
+    <div class="rounded-md bg-red-50 dark:bg-red-900 dark:bg-opacity-20 p-4 mb-4">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-red-400 dark:text-red-300" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800 dark:text-red-200">
+            <%= pluralize(contact.errors.count, "error") %> prohibited this contact from being saved:
+          </h3>
+          <div class="mt-2 text-sm text-red-700 dark:text-red-300">
+            <ul class="list-disc pl-5 space-y-1">
+              <% contact.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Basic Information Section -->
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Basic Information</h3>
+    </div>
+    <div class="px-6 py-4 space-y-4">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <%= f.label :salutation, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.select :salutation, [["Mr.", "Mr."], ["Mrs.", "Mrs."], ["Ms.", "Ms."], ["Dr.", "Dr."], ["Prof.", "Prof."]], { include_blank: "Select..." }, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+        
+        <div>
+          <%= f.label :title, "Job Title", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.text_field :title, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <%= f.label :first_name, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.text_field :first_name, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+
+        <div>
+          <%= f.label :last_name, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <span class="text-red-500">*</span>
+          <%= f.text_field :last_name, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm", required: true %>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <%= f.label :department, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.text_field :department, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+
+        <div>
+          <%= f.label :birthdate, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.date_field :birthdate, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Methods Section -->
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Contact Methods</h3>
+    </div>
+    <div class="px-6 py-4 space-y-6">
+      <!-- Email Addresses -->
+      <div>
+        <h4 class="text-sm font-medium text-gray-900 dark:text-everforest-fg mb-3">Email Addresses</h4>
+        <div class="space-y-3">
+          <div>
+            <%= f.label :personal_email, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+            <%= f.email_field :personal_email, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+          </div>
+          <div>
+            <%= f.label :work_email, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+            <%= f.email_field :work_email, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+          </div>
+          <div>
+            <%= f.label :alternate_email, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+            <%= f.email_field :alternate_email, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+          </div>
+          <div>
+            <%= f.label :preferred_email, "Preferred Email", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+            <%= f.select :preferred_email, Contact.preferred_emails.keys.map { |k| [k.titleize, k] }, { include_blank: "Select..." }, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone Numbers -->
+      <div>
+        <h4 class="text-sm font-medium text-gray-900 dark:text-everforest-fg mb-3">Phone Numbers</h4>
+        <div class="space-y-3">
+          <div>
+            <%= f.label :home_phone, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+            <%= f.telephone_field :home_phone, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+          </div>
+          <div>
+            <%= f.label :mobile_phone, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+            <%= f.telephone_field :mobile_phone, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+          </div>
+          <div>
+            <%= f.label :work_phone, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+            <%= f.telephone_field :work_phone, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+          </div>
+          <div>
+            <%= f.label :other_phone, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+            <%= f.telephone_field :other_phone, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+          </div>
+          <div>
+            <%= f.label :preferred_phone, "Preferred Phone", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+            <%= f.select :preferred_phone, Contact.preferred_phones.keys.map { |k| [k.titleize, k] }, { include_blank: "Select..." }, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mailing Address Section -->
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Mailing Address</h3>
+    </div>
+    <div class="px-6 py-4 space-y-4">
+      <div>
+        <%= f.label :mailing_street, "Street", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+        <%= f.text_area :mailing_street, rows: 2, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <%= f.label :mailing_city, "City", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.text_field :mailing_city, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+        <div>
+          <%= f.label :mailing_state, "State", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.text_field :mailing_state, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <%= f.label :mailing_postal_code, "Postal Code", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.text_field :mailing_postal_code, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+        <div>
+          <%= f.label :mailing_country, "Country", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.text_field :mailing_country, value: f.object.mailing_country || "United States", class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Relationships Section -->
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Relationships</h3>
+    </div>
+    <div class="px-6 py-4 space-y-4">
+      <div>
+        <%= f.label :account_id, "Household Account", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Leave blank to auto-create a household</p>
+        <%= f.collection_select :account_id, @accounts.where(account_type: 'household'), :id, :name, { include_blank: "Auto-create household" }, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+      <div>
+        <%= f.label :primary_affiliation_id, "Primary Organization", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+        <%= f.collection_select :primary_affiliation_id, @accounts.where(account_type: 'organization'), :id, :name, { include_blank: "None" }, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy & Settings Section -->
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Privacy & Settings</h3>
+    </div>
+    <div class="px-6 py-4 space-y-4">
+      <div class="space-y-3">
+        <div class="flex items-start">
+          <div class="flex items-center h-5">
+            <%= f.check_box :deceased, class: "h-4 w-4 text-magenta-600 dark:text-everforest-green focus:ring-magenta-500 border-gray-300 dark:border-everforest-bg-soft rounded" %>
+          </div>
+          <div class="ml-3 text-sm">
+            <%= f.label :deceased, class: "font-medium text-gray-700 dark:text-gray-300" %>
+            <p class="text-gray-500 dark:text-gray-400">Mark if contact is deceased</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex items-center h-5">
+            <%= f.check_box :do_not_contact, class: "h-4 w-4 text-magenta-600 dark:text-everforest-green focus:ring-magenta-500 border-gray-300 dark:border-everforest-bg-soft rounded" %>
+          </div>
+          <div class="ml-3 text-sm">
+            <%= f.label :do_not_contact, class: "font-medium text-gray-700 dark:text-gray-300" %>
+            <p class="text-gray-500 dark:text-gray-400">Do not contact this person</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex items-center h-5">
+            <%= f.check_box :do_not_call, class: "h-4 w-4 text-magenta-600 dark:text-everforest-green focus:ring-magenta-500 border-gray-300 dark:border-everforest-bg-soft rounded" %>
+          </div>
+          <div class="ml-3 text-sm">
+            <%= f.label :do_not_call, class: "font-medium text-gray-700 dark:text-gray-300" %>
+            <p class="text-gray-500 dark:text-gray-400">Do not call this person</p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="flex items-center h-5">
+            <%= f.check_box :email_opt_out, class: "h-4 w-4 text-magenta-600 dark:text-everforest-green focus:ring-magenta-500 border-gray-300 dark:border-everforest-bg-soft rounded" %>
+          </div>
+          <div class="ml-3 text-sm">
+            <%= f.label :email_opt_out, class: "font-medium text-gray-700 dark:text-gray-300" %>
+            <p class="text-gray-500 dark:text-gray-400">Opted out of email communications</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :lead_source, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+        <%= f.text_field :lead_source, placeholder: "e.g., Referral, Event, Website", class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes Section -->
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Notes</h3>
+    </div>
+    <div class="px-6 py-4">
+      <%= f.label :description, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+      <%= f.text_area :description, rows: 4, placeholder: "Additional notes or information about this contact", class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+    </div>
+  </div>
+
+  <!-- Form Actions -->
+  <div class="flex justify-end space-x-3">
+    <%= link_to "Cancel", contacts_path, class: "inline-flex items-center px-4 py-2 border border-gray-300 dark:border-everforest-bg-soft shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-everforest-bg hover:bg-gray-50 dark:hover:bg-everforest-bg-soft focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-magenta-500" %>
+    <%= f.submit class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-magenta-600 hover:bg-magenta-700 dark:bg-everforest-green dark:hover:bg-everforest-aqua focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-magenta-500 cursor-pointer" %>
+  </div>
+<% end %>
