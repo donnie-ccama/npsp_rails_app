@@ -13,6 +13,50 @@
   <% end %>
 </div>
 
+<!-- Filter Form -->
+<div class="mb-6 bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft p-4">
+  <%= form_with url: donations_path, method: :get, local: true, class: "space-y-4" do |f| %>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+      <div>
+        <%= f.label :search, "Search donor", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+        <%= f.text_field :search, value: params[:search], placeholder: "Name or account", class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+      
+      <div>
+        <%= f.label :stage, "Stage", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+        <%= f.select :stage, [['Pledged', 'pledged'], ['Received', 'received'], ['Thanked', 'thanked'], ['Closed Lost', 'closed_lost']], { include_blank: "All Stages" }, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+      
+      <div>
+        <%= f.label :start_date, "From Date", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+        <%= f.date_field :start_date, value: params[:start_date], class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+      
+      <div>
+        <%= f.label :end_date, "To Date", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+        <%= f.date_field :end_date, value: params[:end_date], class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+      <div>
+        <%= f.label :min_amount, "Min Amount", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+        <%= f.number_field :min_amount, value: params[:min_amount], step: 0.01, placeholder: "$0", class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+      
+      <div>
+        <%= f.label :max_amount, "Max Amount", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+        <%= f.number_field :max_amount, value: params[:max_amount], step: 0.01, placeholder: "$999,999", class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+      
+      <div class="flex items-end col-span-2">
+        <%= f.submit "Apply Filters", class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-magenta-600 hover:bg-magenta-700 dark:bg-everforest-green dark:hover:bg-everforest-aqua focus:outline-none cursor-pointer mr-2" %>
+        <%= link_to "Clear Filters", donations_path, class: "inline-flex items-center px-4 py-2 border border-gray-300 dark:border-everforest-bg-soft shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-everforest-bg hover:bg-gray-50 dark:hover:bg-everforest-bg-soft" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
 <div class="bg-white dark:bg-everforest-bg-hard shadow overflow-hidden rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
   <% if @donations.any? %>
     <table class="min-w-full divide-y divide-gray-200 dark:divide-everforest-bg-soft">

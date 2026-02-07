@@ -13,6 +13,28 @@
   <% end %>
 </div>
 
+<!-- Filter Form -->
+<div class="mb-6 bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft p-4">
+  <%= form_with url: accounts_path, method: :get, local: true, class: "space-y-4" do |f| %>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div>
+        <%= f.label :search, "Search by name", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+        <%= f.text_field :search, value: params[:search], placeholder: "e.g., Acme Corporation", class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+      
+      <div>
+        <%= f.label :account_type, "Type", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+        <%= f.select :account_type, [['Household', 'household'], ['Organization', 'organization']], { include_blank: "All Types" }, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+      
+      <div class="flex items-end">
+        <%= f.submit "Apply Filters", class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-magenta-600 hover:bg-magenta-700 dark:bg-everforest-green dark:hover:bg-everforest-aqua focus:outline-none cursor-pointer mr-2" %>
+        <%= link_to "Clear", accounts_path, class: "inline-flex items-center px-4 py-2 border border-gray-300 dark:border-everforest-bg-soft shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-everforest-bg hover:bg-gray-50 dark:hover:bg-everforest-bg-soft" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
 <div class="bg-white dark:bg-everforest-bg-hard shadow overflow-hidden rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
   <% if @accounts.any? %>
     <table class="min-w-full divide-y divide-gray-200 dark:divide-everforest-bg-soft">

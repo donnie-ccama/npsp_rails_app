@@ -3,7 +3,19 @@ class AccountsController < ApplicationController
   before_action :load_parent_accounts, only: [:new, :edit, :create, :update]
 
   def index
-    @accounts = Account.order(created_at: :desc).page(params[:page]).per(25)
+    @accounts = Account.order(created_at: :desc)
+    
+    # Apply filters
+    if params[:search].present?
+      search_term = "%#{params[:search]}%"
+      @accounts = @accounts.where("name ILIKE ?", search_term)
+    end
+    
+    if params[:account_type].present?
+      @accounts = @accounts.where(account_type: params[:account_type])
+    end
+    
+    @accounts = @accounts.page(params[:page]).per(25)
   end
 
   def show

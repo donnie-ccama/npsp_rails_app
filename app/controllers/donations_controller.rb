@@ -3,7 +3,38 @@ class DonationsController < ApplicationController
   before_action :load_associations, only: [:new, :edit, :create, :update]
 
   def index
-    @donations = Donation.includes(:contact, :account, :campaign).order(close_date: :desc).page(params[:page]).per(25)
+    @donations = Donation.includes(:contact, :account, :campaign).order(close_date: :desc)
+    
+    # Apply filters
+    if params[:search].present?
+      search_term = "%#{params[:search]}%"
+      @donations = @donations.joins("LEFT JOIN contacts ON donations.contact_id = contacts.id").joins("LEFT JOIN accounts ON donations.account_id = accounts.id").where(
+        "contacts.first_name ILIKE ? OR contacts.last_name ILIKE ? OR accounts.name ILIKE ?",
+        search_term, search_term, search_term
+      )
+    end
+    
+    if params[:stage].present?
+      @donations = @donations.where(stage: params[:stage])
+    end
+    
+    if params[:start_date].present?
+      @donations = @donations.where("close_date >= ?", params[:start_date])
+    end
+    
+    if params[:end_date].present?
+      @donations = @donations.where("close_date <= ?", params[:end_date])
+    end
+    
+    if params[:min_amount].present?
+      @donations = @donations.where("amount >= ?", params[:min_amount])
+    end
+    
+    if params[:max_amount].present?
+      @donations = @donations.where("amount <= ?", params[:max_amount])
+    end
+    
+    @donations = @donations.page(params[:page]).per(25)
   end
 
   def show
