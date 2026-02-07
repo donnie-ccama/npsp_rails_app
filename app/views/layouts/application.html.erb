@@ -38,23 +38,57 @@
 
           <div class="pt-4 pb-2">
             <p class="px-2 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-              Management
+              Core Records
             </p>
           </div>
           
-          <a href="#" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-magenta-50 hover:text-magenta-600 dark:text-everforest-fg dark:hover:bg-everforest-bg-soft dark:hover:text-everforest-green">
+          <%= link_to contacts_path, class: "group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-magenta-50 hover:text-magenta-600 dark:text-everforest-fg dark:hover:bg-everforest-bg-soft dark:hover:text-everforest-green" do %>
              <svg class="mr-3 h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
             </svg>
             Contacts
-          </a>
+          <% end %>
 
-           <a href="#" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-magenta-50 hover:text-magenta-600 dark:text-everforest-fg dark:hover:bg-everforest-bg-soft dark:hover:text-everforest-green">
+           <%= link_to accounts_path, class: "group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-magenta-50 hover:text-magenta-600 dark:text-everforest-fg dark:hover:bg-everforest-bg-soft dark:hover:text-everforest-green" do %>
             <svg class="mr-3 h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
             </svg>
             Accounts
-          </a>
+          <% end %>
+
+          <div class="pt-4 pb-2">
+            <p class="px-2 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+              Fundraising
+            </p>
+          </div>
+
+          <%= link_to donations_path, class: "group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-magenta-50 hover:text-magenta-600 dark:text-everforest-fg dark:hover:bg-everforest-bg-soft dark:hover:text-everforest-green" do %>
+            <svg class="mr-3 h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Donations
+          <% end %>
+
+          <%= link_to recurring_donations_path, class: "group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-magenta-50 hover:text-magenta-600 dark:text-everforest-fg dark:hover:bg-everforest-bg-soft dark:hover:text-everforest-green" do %>
+            <svg class="mr-3 h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+            Recurring Donations
+          <% end %>
+
+          <%= link_to campaigns_path, class: "group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-magenta-50 hover:text-magenta-600 dark:text-everforest-fg dark:hover:bg-everforest-bg-soft dark:hover:text-everforest-green" do %>
+            <svg class="mr-3 h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/>
+            </svg>
+            Campaigns
+          <% end %>
+
+          <%= link_to payments_path, class: "group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-magenta-50 hover:text-magenta-600 dark:text-everforest-fg dark:hover:bg-everforest-bg-soft dark:hover:text-everforest-green" do %>
+            <svg class="mr-3 h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+            </svg>
+            Payments
+          <% end %>
         </nav>
 
         <div class="border-t border-gray-200 dark:border-everforest-bg-soft p-4">

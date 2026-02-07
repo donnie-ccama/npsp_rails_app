@@ -11,4 +11,12 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "welcome#index"
+
+  # NPSP Model Routes
+  resources :contacts
+  resources :accounts
+  resources :donations
+  resources :recurring_donations
+  resources :campaigns
+  resources :payments
 end
