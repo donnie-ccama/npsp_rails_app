@@ -1,4 +1,4 @@
-class Recurring DonationsController < ApplicationController
+class RecurringDonationsController < ApplicationController
   before_action :set_recurring_donation, only: [:show, :edit, :update, :destroy]
   before_action :load_associations, only: [:new, :edit, :create, :update]
 
