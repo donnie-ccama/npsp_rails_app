@@ -89,6 +89,61 @@
       </div>
     </div>
 
+    <!-- Addresses Card -->
+    <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+      <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft flex justify-between items-center">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Addresses</h2>
+        <%= link_to new_account_address_path(@account), class: "text-sm text-magenta-600 dark:text-everforest-aqua hover:underline" do %>
+          + Add Address
+        <% end %>
+      </div>
+      <% if @addresses.any? %>
+        <div class="divide-y divide-gray-200 dark:divide-everforest-bg-soft">
+          <% @addresses.each do |address| %>
+            <div class="px-6 py-4 hover:bg-gray-50 dark:hover:bg-everforest-bg-soft">
+              <div class="flex justify-between items-start">
+                <div class="flex-1">
+                  <div class="flex items-center space-x-2 mb-1">
+                    <span class="text-sm font-medium text-gray-900 dark:text-everforest-fg">
+                      <%= address.address_type&.titleize || 'Home' %>
+                    </span>
+                    <% if address.default_address? %>
+                      <span class="px-2 py-0.5 rounded text-xs font-medium bg-magenta-100 text-magenta-800 dark:bg-magenta-900 dark:bg-opacity-30 dark:text-magenta-300">
+                        Default
+                      </span>
+                    <% end %>
+                    <% if address.seasonal? && address.currently_active? %>
+                      <span class="px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:bg-opacity-30 dark:text-blue-300">
+                        Active Now
+                      </span>
+                    <% end %>
+                  </div>
+                  <p class="text-sm text-gray-700 dark:text-gray-300">
+                    <%= address.full_address %>
+                  </p>
+                  <% if address.seasonal? && address.seasonal_start_month.present? %>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Seasonal: <%= Date::MONTHNAMES[address.seasonal_start_month] %> <%= address.seasonal_start_day || 1 %> - 
+                      <%= Date::MONTHNAMES[address.seasonal_end_month] %> <%= address.seasonal_end_day || 28 %>
+                    </p>
+                  <% end %>
+                </div>
+                <div class="flex space-x-2 ml-4">
+                  <%= link_to 'Edit', edit_account_address_path(@account, address), class: "text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200" %>
+                  <%= button_to 'Delete', account_address_path(@account, address), method: :delete, data: { confirm: 'Are you sure?' }, class: "text-sm text-red-600 hover:text-red-900 dark:text-everforest-red dark:hover:text-red-400" %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="px-6 py-8 text-center">
+          <p class="text-sm text-gray-500 dark:text-gray-400">No addresses yet</p>
+          <%= link_to "Add Address", new_account_address_path(@account), class: "mt-2 inline-block text-sm text-magenta-600 dark:text-everforest-aqua hover:underline" %>
+        </div>
+      <% end %>
+    </div>
+
     <!-- Donation Summary Card -->
     <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
       <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">

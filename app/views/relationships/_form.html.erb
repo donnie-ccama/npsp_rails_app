@@ -1,0 +1,59 @@
+<% content_for :title, "#{@relationship.persisted? ? 'Edit' : 'New'} Relationship - NPSP CRM" %>
+
+<div class="max-w-3xl">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-everforest-fg">
+      <%= @relationship.persisted? ? 'Edit' : 'New' %> Relationship
+    </h1>
+    <% if @relationship.persisted? %>
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        Reciprocal relationship will be updated automatically
+      </p>
+    <% else %>
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        A reciprocal relationship will be created automatically
+      </p>
+    <% end %>
+  </div>
+
+  <%= form_with model: @relationship, class: "space-y-6" do |f| %>
+    <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft p-6">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg mb-4">Relationship Details</h2>
+      
+      <div class="space-y-4">
+        <div>
+          <%= f.label :contact_id, "Contact", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+          <%= f.select :contact_id, options_from_collection_for_select(@contacts, :id, :full_name, @relationship.contact_id), { prompt: "Select Contact" }, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+        
+        <div>
+          <%= f.label :relationship_type, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+          <%= f.select :relationship_type, Relationship::RECIPROCAL_TYPES.keys, { prompt: "Select Relationship Type" }, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+          <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            For example: If Contact A is "Parent" of Contact B, then B will automatically be "Child" of A
+          </p>
+        </div>
+        
+        <div>
+          <%= f.label :related_contact_id, "Related Contact", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+          <%= f.select :related_contact_id, options_from_collection_for_select(@contacts, :id, :full_name, @relationship.related_contact_id), { prompt: "Select Related Contact" }, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+        
+        <div>
+          <%= f.label :status, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+          <%= f.select :status, Relationship.statuses.keys.map { |k| [k.titleize, k] }, {}, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+        
+        <div>
+          <%= f.label :description, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+          <%= f.text_area :description, rows: 3, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between">
+      <%= f.submit @relationship.persisted? ? "Update Relationship" : "Create Relationship", class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-magenta-600 hover:bg-magenta-700 dark:bg-everforest-green dark:hover:bg-everforest-aqua focus:outline-none cursor-pointer" %>
+      <%= link_to "Cancel", relationships_path, class: "inline-flex items-center px-4 py-2 border border-gray-300 dark:border-everforest-bg-soft shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-everforest-bg hover:bg-gray-50 dark:hover:bg-everforest-bg-soft" %>
+    </div>
+  <% end %>
+</div>

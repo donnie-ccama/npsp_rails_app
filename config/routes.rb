@@ -17,9 +17,13 @@ Rails.application.routes.draw do
 
   # NPSP Model Routes
   resources :contacts
-  resources :accounts
+  resources :accounts do
+    resources :addresses, only: [:new, :create, :edit, :update, :destroy]
+  end
   resources :donations
   resources :recurring_donations
   resources :campaigns
   resources :payments
+  resources :relationships
+  resources :affiliations
 end

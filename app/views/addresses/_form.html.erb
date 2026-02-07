@@ -1,0 +1,97 @@
+<% content_for :title, "#{@address.persisted? ? 'Edit' : 'New'} Address - NPSP CRM" %>
+
+<div class="max-w-3xl">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-everforest-fg">
+      <%= @address.persisted? ? 'Edit' : 'New' %> Address
+    </h1>
+    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+      for <%= link_to @account.name, account_path(@account), class: "text-magenta-600 dark:text-everforest-aqua hover:underline" %>
+    </p>
+  </div>
+
+  <%= form_with model: [@account, @address], class: "space-y-6" do |f| %>
+    <!-- Street Address -->
+    <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft p-6">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg mb-4">Address Details</h2>
+      
+      <div class="space-y-4">
+        <div>
+          <%= f.label :street, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+          <%= f.text_area :street, rows: 2, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+        
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <%= f.label :city, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+            <%= f.text_field :city, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+          </div>
+          
+          <div>
+            <%= f.label :state, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+            <%= f.text_field :state, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <%= f.label :postal_code, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+            <%= f.text_field :postal_code, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+          </div>
+          
+          <div>
+            <%= f.label :country, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+            <%= f.text_field :country, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <%= f.label :address_type, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+            <%= f.select :address_type, Address.address_types.keys.map { |k| [k.titleize, k] }, {}, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+          </div>
+          
+          <div class="flex items-end">
+            <label class="flex items-center">
+              <%= f.check_box :default_address, class: "h-4 w-4 text-magenta-600 focus:ring-magenta-500 border-gray-300 rounded" %>
+              <span class="ml-2 text-sm text-gray-900 dark:text-everforest-fg">Set as Default Address</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seasonal Dates (if seasonal) -->
+    <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft p-6">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg mb-4">Seasonal Dates (Optional)</h2>
+      
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <%= f.label :seasonal_start_month, "Start Month", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+          <%= f.number_field :seasonal_start_month, min: 1, max: 12, placeholder: "1-12", class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+        
+        <div>
+          <%= f.label :seasonal_start_day, "Start Day", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+          <%= f.number_field :seasonal_start_day, min: 1, max: 31, placeholder: "1-31", class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+        
+        <div>
+          <%= f.label :seasonal_end_month, "End Month", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+          <%= f.number_field :seasonal_end_month, min: 1, max: 12, placeholder: "1-12", class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+        
+        <div>
+          <%= f.label :seasonal_end_day, "End Day", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+          <%= f.number_field :seasonal_end_day, min: 1, max: 31, placeholder: "1-31", class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center justify-between">
+      <%= f.submit @address.persisted? ? "Update Address" : "Create Address", class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-magenta-600 hover:bg-magenta-700 dark:bg-everforest-green dark:hover:bg-everforest-aqua focus:outline-none cursor-pointer" %>
+      <%= link_to "Cancel", account_path(@account), class: "inline-flex items-center px-4 py-2 border border-gray-300 dark:border-everforest-bg-soft shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-everforest-bg hover:bg-gray-50 dark:hover:bg-everforest-bg-soft" %>
+    </div>
+  <% end %>
+</div>

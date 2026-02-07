@@ -1,0 +1,81 @@
+<% content_for :title, "Affiliations - NPSP CRM" %>
+
+<div class="mb-6 flex justify-between items-center">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-everforest-fg">Affiliations</h1>
+    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Manage contact-to-organization relationships</p>
+  </div>
+  <%= link_to new_affiliation_path, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-magenta-600 hover:bg-magenta-700 dark:bg-everforest-green dark:hover:bg-everforest-aqua focus:outline-none" do %>
+    <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+    </svg>
+    New Affiliation
+  <% end %>
+</div>
+
+<div class="bg-white dark:bg-everforest-bg-hard shadow overflow-hidden rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+  <% if @affiliations.any? %>
+    <table class="min-w-full divide-y divide-gray-200 dark:divide-everforest-bg-soft">
+      <thead class="bg-gray-50 dark:bg-everforest-bg">
+        <tr>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Contact</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Organization</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Role</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Dates</th>
+          <th scope="col" class="relative px-6 py-3">
+            <span class="sr-only">Actions</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white dark:bg-everforest-bg-hard divide-y divide-gray-200 dark:divide-everforest-bg-soft">
+        <% @affiliations.each do |affiliation| %>
+          <tr class="hover:bg-gray-50 dark:hover:bg-everforest-bg-soft">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm font-medium text-gray-900 dark:text-everforest-fg">
+                <%= link_to affiliation.contact.full_name, contact_path(affiliation.contact), class: "text-magenta-600 dark:text-everforest-aqua hover:underline" %>
+              </div>
+              <% if affiliation.primary? %>
+                <span class="text-xs text-magenta-600 dark:text-everforest-green">Primary</span>
+              <% end %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-900 dark:text-everforest-fg">
+                <%= link_to affiliation.organization.name, account_path(affiliation.organization), class: "text-magenta-600 dark:text-everforest-aqua hover:underline" %>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+              <%= affiliation.role || '-' %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <%= affiliation.current? ? 'bg-green-100 text-green-800 dark:bg-everforest-green dark:bg-opacity-20 dark:text-everforest-green' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300' %>">
+                <%= affiliation.status&.titleize || 'Current' %>
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+              <%= affiliation.start_date&.strftime('%b %Y') || '-' %> - <%= affiliation.end_date&.strftime('%b %Y') || 'Present' %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <%= link_to 'Edit', edit_affiliation_path(affiliation), class: "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 mr-3" %>
+              <%= button_to 'Delete', affiliation_path(affiliation), method: :delete, data: { confirm: 'Are you sure?' }, class: "text-red-600 hover:text-red-900 dark:text-everforest-red dark:hover:text-red-400" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div class="text-center py-12">
+      <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-everforest-fg">No affiliations</h3>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Get started by creating a new affiliation.</p>
+    </div>
+  <% end %>
+</div>
+
+<% if @affiliations.total_pages > 1 %>
+  <div class="mt-6 flex justify-center">
+    <%= paginate @affiliations %>
+  </div>
+<% end %>

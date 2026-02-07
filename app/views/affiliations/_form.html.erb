@@ -1,0 +1,69 @@
+<% content_for :title, "#{@affiliation.persisted? ? 'Edit' : 'New'} Affiliation - NPSP CRM" %>
+
+<div class="max-w-3xl">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-everforest-fg">
+      <%= @affiliation.persisted? ? 'Edit' : 'New' %> Affiliation
+    </h1>
+    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Link a contact to an organization</p>
+  </div>
+
+  <%= form_with model: @affiliation, class: "space-y-6" do |f| %>
+    <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft p-6">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg mb-4">Affiliation Details</h2>
+      
+      <div class="space-y-4">
+        <div>
+          <%= f.label :contact_id, "Contact", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+          <%= f.select :contact_id, options_from_collection_for_select(@contacts, :id, :full_name, @affiliation.contact_id), { prompt: "Select Contact" }, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+        
+        <div>
+          <%= f.label :organization_id, "Organization", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+          <%= f.select :organization_id, options_from_collection_for_select(@organizations, :id, :name, @affiliation.organization_id), { prompt: "Select Organization" }, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+        
+        <div>
+          <%= f.label :role, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+          <%= f.text_field :role, placeholder: "e.g., Board Member, Employee, Volunteer", class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+        
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <%= f.label :status, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+            <%= f.select :status, Affiliation.statuses.keys.map { |k| [k.titleize, k] }, {}, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+          </div>
+          
+          <div class="flex items-end">
+            <label class="flex items-center">
+              <%= f.check_box :primary, class: "h-4 w-4 text-magenta-600 focus:ring-magenta-500 border-gray-300 rounded" %>
+              <span class="ml-2 text-sm text-gray-900 dark:text-everforest-fg">Primary Affiliation</span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <%= f.label :start_date, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+            <%= f.date_field :start_date, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+          </div>
+          
+          <div>
+            <%= f.label :end_date, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+            <%= f.date_field :end_date, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+          </div>
+        </div>
+        
+        <div>
+          <%= f.label :description, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+          <%= f.text_area :description, rows: 3, class: "block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between">
+      <%= f.submit @affiliation.persisted? ? "Update Affiliation" : "Create Affiliation", class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-magenta-600 hover:bg-magenta-700 dark:bg-everforest-green dark:hover:bg-everforest-aqua focus:outline-none cursor-pointer" %>
+      <%= link_to "Cancel", affiliations_path, class: "inline-flex items-center px-4 py-2 border border-gray-300 dark:border-everforest-bg-soft shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-everforest-bg hover:bg-gray-50 dark:hover:bg-everforest-bg-soft" %>
+    </div>
+  <% end %>
+</div>

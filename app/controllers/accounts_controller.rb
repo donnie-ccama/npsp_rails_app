@@ -22,6 +22,7 @@ class AccountsController < ApplicationController
     @contacts = @account.contacts.limit(10)
     @recent_donations = @account.donations.order(donation_date: :desc).limit(5)
     @recurring_donations = @account.recurring_donations.limit(5)
+    @addresses = @account.addresses.order(default_address: :desc)
   end
 
   def new
