@@ -31,7 +31,7 @@ class ContactsController < ApplicationController
   end
 
   def show
-    @recent_donations = @contact.donations.order(donation_date: :desc).limit(5)
+    @recent_donations = @contact.donations.order(close_date: :desc).limit(5)
     @recurring_donations = @contact.recurring_donations.limit(5)
     @affiliations = @contact.affiliations.includes(:organization).limit(5)
   end

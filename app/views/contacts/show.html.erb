@@ -163,7 +163,7 @@
                   <%= number_to_currency(donation.amount) %>
                 </p>
                 <p class="text-sm text-gray-500 dark:text-gray-400">
-                  <%= donation.donation_date&.strftime('%b %d, %Y') || 'Date TBD' %>
+                  <%= donation.close_date&.strftime('%b %d, %Y') || 'Date TBD' %>
                 </p>
               </div>
               <%= link_to 'View', donation_path(donation), class: "text-magenta-600 dark:text-everforest-aqua hover:underline text-sm" %>
