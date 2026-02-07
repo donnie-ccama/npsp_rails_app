@@ -23,15 +23,6 @@ test:
 # Production uses PostgreSQL (Supabase) via DATABASE_URL.
 # Set DATABASE_URL in your deployment platform (Render, etc.).
 production:
-  primary:
-    url: <%= ENV["DATABASE_URL"] %>
-    migrations_paths: db/migrate
-  cache:
-    url: <%= ENV["DATABASE_URL"] %>
-    migrations_paths: db/cache_migrate
-  queue:
-    url: <%= ENV["DATABASE_URL"] %>
-    migrations_paths: db/queue_migrate
-  cable:
-    url: <%= ENV["DATABASE_URL"] %>
-    migrations_paths: db/cable_migrate
+  adapter: postgresql
+  url: <%= ENV["DATABASE_URL"] %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
