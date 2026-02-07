@@ -113,7 +113,7 @@
 </div>
 
 <!-- Pagination -->
-<% if @contacts.total_ pages > 1 %>
+<% if @contacts.total_pages > 1 %>
   <div class="mt-6 flex justify-center">
     <%= paginate @contacts, params: params.permit(:search, :account_id, :do_not_contact, :deceased) %>
   </div>
