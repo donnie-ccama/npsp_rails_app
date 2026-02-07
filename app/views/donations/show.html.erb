@@ -1,4 +1,221 @@
-<div>
-  <h1 class="font-bold text-4xl">Donations#show</h1>
-  <p>Find me in app/views/donations/show.html.erb</p>
+<% content_for :title, "#{@donation.name || 'Donation'} - NPSP CRM" %>
+
+<!-- Page Header -->
+<div class="mb-6 flex justify-between items-start">
+  <div>
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-everforest-fg"><%= @donation.name || "Donation #{@donation.id}" %></h1>
+    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+      <% if @donation.contact.present? %>
+        <%= link_to @donation.contact.full_name, contact_path(@donation.contact), class: "text-magenta-600 dark:text-everforest-aqua hover:underline" %>
+        <% if @donation.account.present? %>
+          · <%= link_to @donation.account.name, account_path(@donation.account), class: "text-magenta-600 dark:text-everforest-aqua hover:underline" %>
+        <% end %>
+      <% elsif @donation.account.present% %>
+        <%= link_to @donation.account.name, account_path(@donation.account), class: "text-magenta-600 dark:text-everforest-aqua hover:underline" %>
+      <% end %>
+    </p>
+  </div>
+  <div class="flex space-x-3">
+    <%= link_to edit_donation_path(@donation), class: "inline-flex items-center px-4 py-2 border border-gray-300 dark:border-everforest-bg-soft shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-everforest-bg hover:bg-gray-50 dark:hover:bg-everforest-bg-soft focus:outline-none" do %>
+      <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+      </svg>
+      Edit
+    <% end %>
+    <%=button_to donation_path(@donation), method: :delete, data: { confirm: 'Are you sure?' }, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 focus:outline-none" do %>
+      <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+      </svg>
+      Delete
+    <% end %>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+  <!-- Left Column: Main Information -->
+  <div class="lg:col-span-2 space-y-6">
+    <!-- Donation Details Card -->
+    <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+      <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Donation Details</h2>
+      </div>
+      <div class="px-6 py-4">
+        <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Amount</dt>
+            <dd class="mt-1 text-3xl font-bold text-everforest-green dark:text-everforest-green">
+              <%= number_to_currency(@donation.amount || 0) %>
+            </dd>
+          </div>
+
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Date</dt>
+            <dd class="mt-1 text-lg text-gray-900 dark:text-everforest-fg">
+              <%= @donation.close_date&.strftime('%B %d, %Y') || '-' %>
+            </dd>
+          </div>
+
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Stage</dt>
+            <dd class="mt-1">
+              <% stage_color = @donation.stage == 'received' || @donation.stage == 'thanked' ? 'green' : (@donation.stage == 'closed_lost' ? 'red' : 'yellow') %>
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-<%= stage_color %>-100 text-<%= stage_color %>-800 dark:bg-opacity-20 capitalize">
+                <%= @donation.stage&.gsub('_', ' ') || 'Unknown' %>
+              </span>
+            </dd>
+          </div>
+
+          <% if @donation.gift_type.present? %>
+            <div>
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Gift Type</dt>
+              <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg capitalize">
+                <%= @donation.gift_type.titleize.gsub('_', ' ') %>
+              </dd>
+            </div>
+          <% end %>
+
+          <% if @donation.campaign.present? %>
+            <div>
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Campaign</dt>
+              <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg">
+                <%= link_to @donation.campaign.name, campaign_path(@donation.campaign), class: "text-magenta-600 dark:text-everforest-aqua hover:underline" %>
+              </dd>
+            </div>
+          <% end %>
+
+          <% if @donation.lead_source.present? %>
+            <div>
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Lead Source</dt>
+              <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg"><%= @donation.lead_source %></dd>
+            </div>
+          <% end %>
+        </dl>
+      </div>
+    </div>
+
+    <!-- Payments Card -->
+    <% if @payments.any? %>
+      <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft flex justify-between items-center">
+          <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Payments</h2>
+        </div>
+        <div class="divide-y divide-gray-200 dark:divide-everforest-bg-soft">
+          <% @payments.each do |payment| %>
+            <div class="px-6 py-4 flex justify-between items-center hover:bg-gray-50 dark:hover:bg-everforest-bg-soft">
+              <div>
+                <p class="text-sm font-medium text-gray-900 dark:text-everforest-fg">
+                  <%= number_to_currency(payment.amount) %>
+                </p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                  <%= payment.payment_date&.strftime('%b %d, %Y') || 'Date TBD' %>
+                  <% if payment.payment_method.present? %>
+                    · <%= payment.payment_method.titleize %>
+                  <% end %>
+                </p>
+              </div>
+              <%= link_to 'View', payment_path(payment), class: "text-magenta-600 dark:text-everforest-aqua hover:underline text-sm" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Tribute/Memorial Card -->
+    <% if @donation.tribute_type.present? %>
+      <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+          <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Tribute Gift</h2>
+        </div>
+        <div class="px-6 py-4 space-y-3">
+          <div>
+            <dt class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Type</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg capitalize">
+              <%= @donation.tribute_type.titleize.gsub('_', ' ') %>
+            </dd>
+          </div>
+          <% if @donation.honoree_name.present? %>
+            <div>
+              <dt class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Honoree</dt>
+              <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg">
+                <%= @donation.honoree_name %>
+              </dd>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Notes Card -->
+    <% if @donation.description.present? %>
+      <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+          <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Notes</h2>
+        </div>
+        <div class="px-6 py-4">
+          <p class="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap"><%= @donation.description %></p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Right Column: Additional Details -->
+  <div class="space-y-6">
+    <!-- Acknowledgment Card -->
+    <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+      <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Acknowledgment</h2>
+      </div>
+      <div class="px-6 py-4 space-y-3">
+        <div>
+          <dt class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Status</dt>
+          <dd class="mt-1">
+            <% if @donation.acknowledgment_status.present? %>
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:bg-opacity-30 dark:text-blue-300 capitalize">
+                <%= @donation.acknowledgment_status.titleize.gsub('_', ' ') %>
+              </span>
+            <% else %>
+              <span class="text-sm text-gray-500 dark:text-gray-400">Not set</span>
+            <% end %>
+          </dd>
+        </div>
+        <% if @donation.acknowledgment_date.present? %>
+          <div>
+            <dt class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Date</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg">
+              <%= @donation.acknowledgment_date.strftime('%b %d, %Y') %>
+            </dd>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Next Step Card -->
+    <% if @donation.next_step.present? %>
+      <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+          <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Next Step</h2>
+        </div>
+        <div class="px-6 py-4">
+          <p class="text-sm text-gray-900 dark:text-everforest-fg"><%= @donation.next_step %></p>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- System Info Card -->
+    <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+      <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">System Info</h2>
+      </div>
+      <div class="px-6 py-4 space-y-3 text-xs text-gray-500 dark:text-gray-400">
+        <div>
+          <dt class="font-medium">Created</dt>
+          <dd><%= @donation.created_at.strftime('%b %d, %Y %I:%M %p') %></dd>
+        </div>
+        <div>
+          <dt class="font-medium">Last Updated</dt>
+          <dd><%= @donation.updated_at.strftime('%b %d, %Y %I:%M %p') %></dd>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

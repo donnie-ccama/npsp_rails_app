@@ -1,0 +1,174 @@
+<%= form_with(model: donation, local: true, class: "space-y-8") do |f| %>
+  <% if donation.errors.any? %>
+    <div class="rounded-md bg-red-50 dark:bg-red-900 dark:bg-opacity-20 p-4 mb-4">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-red-400 dark:text-red-300" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800 dark:text-red-200">
+            <%= pluralize(donation.errors.count, "error") %> prohibited this donation from being saved:
+          </h3>
+          <div class="mt-2 text-sm text-red-700 dark:text-red-300">
+            <ul class="list-disc pl-5 space-y-1">
+              <% donation.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Basic Information Section -->
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Donation Information</h3>
+    </div>
+    <div class="px-6 py-4 space-y-4">
+      <div>
+        <%= f.label :name, "Name (optional - auto-generated)", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+        <%= f.text_field :name, placeholder: "e.g., Smith Household 01/2026 Donation", class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <%= f.label :amount, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.number_field :amount, step: 0.01, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+
+        <div>
+          <%= f.label :close_date, "Date", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <span class="text-red-500">*</span>
+          <%= f.date_field :close_date, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm", required: true %>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <%= f.label :stage, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <span class="text-red-500">*</span>
+          <%= f.select :stage, Donation.stages.keys.map { |k| [k.titleize, k] }, {}, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+
+        <div>
+          <%= f.label :probability, "Probability %", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.number_field :probability, min: 0, max: 100, placeholder: "e.g., 75", class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <%= f.label :gift_type, "Gift Type", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.select :gift_type, Donation.gift_types.keys.map { |k| [k.titleize, k] }, { include_blank: "Select..." }, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+
+        <div>
+          <%= f.label :donation_type, "Type", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.text_field :donation_type, placeholder: "e.g., Annual Fund, Major Gift", class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Donor Information Section -->
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Donor Information</h3>
+    </div>
+    <div class="px-6 py-4 space-y-4">
+      <div>
+        <%= f.label :contact_id, "Contact (Primary Donor)", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+        <%= f.collection_select :contact_id, @contacts, :id, :full_name, { include_blank: "Select a contact..." }, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+
+      <div>
+        <%= f.label :account_id, "Account (Household/Organization)", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Auto-set from contact if not specified</p>
+        <%= f.collection_select :account_id, @accounts, :id, :name, { include_blank: "Auto-set from contact" }, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+
+      <div>
+        <%= f.label :campaign_id, "Campaign", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+        <%= f.collection_select :campaign_id, @campaigns, :id, :name, { include_blank: "None" }, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+
+      <div>
+        <%= f.label :lead_source, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+        <%= f.text_field :lead_source, placeholder: "e.g., Website, Event, Referral", class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Acknowledgment Section -->
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Acknowledgment</h3>
+    </div>
+    <div class="px-6 py-4 space-y-4">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <%= f.label :acknowledgment_status, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.select :acknowledgment_status, Donation.acknowledgment_statuses.keys.map { |k| [k.titleize.gsub('_', ' '), k] }, { include_blank: "Select..." }, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+
+        <div>
+          <%= f.label :acknowledgment_date, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.date_field :acknowledgment_date, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tribute/Memorial Section -->
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Tribute/Memorial Gift</h3>
+    </div>
+    <div class="px-6 py-4 space-y-4">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <%= f.label :tribute_type, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.select :tribute_type, Donation.tribute_types.keys.map { |k| [k.titleize.gsub('_', ' '), k] }, { include_blank: "None" }, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+
+        <div>
+          <%= f.label :honoree_name, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+          <%= f.text_field :honoree_name, placeholder: "Person being honored", class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :notification_recipient_id, "Notify (Contact)", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+        <%= f.collection_select :notification_recipient_id, @contacts, :id, :full_name, { include_blank: "None" }, class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes Section -->
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Notes & Next Steps</h3>
+    </div>
+    <div class="px-6 py-4 space-y-4">
+      <div>
+        <%= f.label :next_step, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+        <%= f.text_field :next_step, placeholder: "e.g., Call to thank, Send acknowledgment letter", class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+
+      <div>
+        <%= f.label :description, class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+        <%= f.text_area :description, rows: 4, placeholder: "Additional notes about this donation", class: "mt-1 block w-full rounded-md border-gray-300 dark:border-everforest-bg-soft dark:bg-everforest-bg shadow-sm focus:border-magenta-500 focus:ring-magenta-500 dark:text-everforest-fg sm:text-sm" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Actions -->
+  <div class="flex justify-end space-x-3">
+    <%= link_to "Cancel", donations_path, class: "inline-flex items-center px-4 py-2 border border-gray-300 dark:border-everforest-bg-soft shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-everforest-bg hover:bg-gray-50 dark:hover:bg-everforest-bg-soft focus:outline-none" %>
+    <%= f.submit class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-magenta-600 hover:bg-magenta-700 dark:bg-everforest-green dark:hover:bg-everforest-aqua focus:outline-none cursor-pointer" %>
+  </div>
+<% end %>
