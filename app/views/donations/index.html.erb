@@ -1,4 +1,78 @@
-<div>
-  <h1 class="font-bold text-4xl">Donations#index</h1>
-  <p>Find me in app/views/donations/index.html.erb</p>
+<% content_for :title, "Donations - NPSP CRM" %>
+
+<div class="mb-6 flex justify-between items-center">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-everforest-fg">Donations</h1>
+    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Track one-time and ongoing contributions</p>
+  </div>
+  <%= link_to new_donation_path, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-magenta-600 hover:bg-magenta-700 dark:bg-everforest-green dark:hover:bg-everforest-aqua focus:outline-none" do %>
+    <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+    </svg>
+    New Donation
+  <% end %>
+</div>
+
+<div class="bg-white dark:bg-everforest-bg-hard shadow overflow-hidden rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+  <% if @donations.any? %>
+    <table class="min-w-full divide-y divide-gray-200 dark:divide-everforest-bg-soft">
+      <thead class="bg-gray-50 dark:bg-everforest-bg">
+        <tr>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Donor</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Amount</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Type</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
+          <th scope="col" class="relative px-6 py-3">
+            <span class="sr-only">Actions</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white dark:bg-everforest-bg-hard divide-y divide-gray-200 dark:divide-everforest-bg-soft">
+        <% @donations.each do |donation| %>
+          <tr class="hover:bg-gray-50 dark:hover:bg-everforest-bg-soft">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+              <%= donation.donation_date&.strftime('%b %d, %Y') || '-' %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm font-medium text-gray-900 dark:text-everforest-fg">
+                <%= donation.contact&.first_name %> <%= donation.contact&.last_name %>
+              </div>
+              <% if donation.account %>
+                <div class="text-sm text-gray-500 dark:text-gray-400"><%= donation.account.name %></div>
+              <% end %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-everforest-green dark:text-everforest-green">
+              <%= number_to_currency(donation.amount) %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 capitalize">
+              <%= donation.donation_type || '-' %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <% status_color = donation.status == 'completed' ? 'green' : (donation.status == 'pending' ? 'yellow' : 'gray') %>
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-<%= status_color %>-100 text-<%= status_color %>-800 dark:bg-everforest-<%= status_color == 'green' ? 'green' : (status_color == 'yellow' ? 'yellow' : 'fg') %> dark:bg-opacity-20 dark:text-everforest-<%= status_color == 'green' ? 'green' : (status_color == 'yellow' ? 'yellow' : 'fg') %>">
+                <%= donation.status || 'pending' %>
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <%= link_to 'View', donation_path(donation), class: "text-magenta-600 hover:text-magenta-900 dark:text-everforest-aqua dark:hover:text-everforest-blue mr-3" %>
+              <%= link_to 'Edit', edit_donation_path(donation), class: "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 mr-3" %>
+              <%= button_to 'Delete', donation_path(donation), method: :delete, data: { confirm: 'Are you sure?' }, class: "text-red-600 hover:text-red-900 dark:text-everforest-red dark:hover:text-red-400" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div class="text-center py-12">
+      <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-everforest-fg">No donations</h3>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Get started by recording a new donation.</p>
+      <div class="mt-6">
+        <%= link_to 'New Donation', new_donation_path, class: "inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-magenta-600 hover:bg-magenta-700 dark:bg-everforest-green dark:hover:bg-everforest-aqua" %>
+      </div>
+    </div>
+  <% end %>
 </div>

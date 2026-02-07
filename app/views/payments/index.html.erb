@@ -1,4 +1,73 @@
-<div>
-  <h1 class="font-bold text-4xl">Payments#index</h1>
-  <p>Find me in app/views/payments/index.html.erb</p>
+<% content_for :title, "Payments - NPSP CRM" %>
+
+<div class="mb-6 flex justify-between items-center">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-everforest-fg">Payments</h1>
+    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Track payment transactions and processing</p>
+  </div>
+  <%= link_to new_payment_path, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-magenta-600 hover:bg-magenta-700 dark:bg-everforest-green dark:hover:bg-everforest-aqua focus:outline-none" do %>
+    <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+    </svg>
+    New Payment
+  <% end %>
+</div>
+
+<div class="bg-white dark:bg-everforest-bg-hard shadow overflow-hidden rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+  <% if @payments.any? %>
+    <table class="min-w-full divide-y divide-gray-200 dark:divide-everforest-bg-soft">
+      <thead class="bg-gray-50 dark:bg-everforest-bg">
+        <tr>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Amount</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Method</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Transaction ID</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
+          <th scope="col" class="relative px-6 py-3">
+            <span class="sr-only">Actions</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white dark:bg-everforest-bg-hard divide-y divide-gray-200 dark:divide-everforest-bg-soft">
+        <% @payments.each do |payment| %>
+          <tr class="hover:bg-gray-50 dark:hover:bg-everforest-bg-soft">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+              <%= payment.payment_date&.strftime('%b %d, %Y') || '-' %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-everforest-green dark:text-everforest-green">
+              <%= number_to_currency(payment.amount) %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 capitalize">
+              <%= payment.payment_method || '-' %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 font-mono">
+              <%= payment.transaction_id || '-' %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <% status_color = payment.status == 'completed' ? 'green' : (payment.status == 'pending' ? 'yellow' : 'red') %>
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-<%= status_color %>-100 text-<%= status_color %>-800 dark:bg-opacity-20 capitalize">
+                <%= payment.status || 'pending' %>
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <%= link_to 'View', payment_path(payment), class: "text-magenta-600 hover:text-magenta-900 dark:text-everforest-aqua dark:hover:text-everforest-blue mr-3" %>
+              <%= link_to 'Edit', edit_payment_path(payment), class: "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 mr-3" %>
+              <%= button_to 'Delete', payment_path(payment), method: :delete, data: { confirm: 'Are you sure?' }, class: "text-red-600 hover:text-red-900 dark:text-everforest-red dark:hover:text-red-400" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div class="text-center py-12">
+      <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-everforest-fg">No payments</h3>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Get started by recording a new payment.</p>
+      <div class="mt-6">
+        <%= link_to 'New Payment', new_payment_path, class: "inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-magenta-600 hover:bg-magenta-700 dark:bg-everforest-green dark:hover:bg-everforest-aqua" %>
+      </div>
+    </div>
+  <% end %>
 </div>
