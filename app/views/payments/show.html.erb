@@ -1,4 +1,84 @@
-<div>
-  <h1 class="font-bold text-4xl">Payments#show</h1>
-  <p>Find me in app/views/payments/show.html.erb</p>
+<% content_for :title, "Payment - NPSP CRM" %>
+
+<div class="mb-6 flex justify-between items-start">
+  <div>
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-everforest-fg">Payment</h1>
+    <% if @payment.donation.present? %>
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+        For <%= link_to @payment.donation.name, donation_path(@payment.donation), class: "text-magenta-600 dark:text-everforest-aqua hover:underline" %>
+      </p>
+    <% end %>
+  </div>
+  <div class="flex space-x-3">
+    <%= link_to edit_payment_path(@payment), class: "inline-flex items-center px-4 py-2 border border-gray-300 dark:border-everforest-bg-soft shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-everforest-bg hover:bg-gray-50 dark:hover:bg-everforest-bg-soft" do %>
+      <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+      </svg>
+      Edit
+    <% end %>
+    <%= button_to payment_path(@payment), method: :delete, data: { confirm: 'Are you sure?' }, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700" do %>
+      <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+      </svg>
+      Delete
+    <% end %>
+  </div>
+</div>
+
+<div class="max-w-2xl">
+  <div class="bg-white dark:bg-everforest-bg-hard shadow rounded-lg border border-gray-200 dark:border-everforest-bg-soft">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-everforest-bg-soft">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-everforest-fg">Payment Details</h2>
+    </div>
+    <div class="px-6 py-4">
+      <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Amount</dt>
+          <dd class="mt-1 text-3xl font-bold text-everforest-green dark:text-everforest-green">
+            <%= number_to_currency(@payment.amount || 0) %>
+          </dd>
+        </div>
+
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Date</dt>
+          <dd class="mt-1 text-lg text-gray-900 dark:text-everforest-fg">
+            <%= @payment.payment_date&.strftime('%B %d, %Y') || '-' %>
+          </dd>
+        </div>
+
+        <% if @payment.payment_method.present? %>
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Method</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg capitalize">
+              <%= @payment.payment_method.titleize.gsub('_', ' ') %>
+            </dd>
+          </div>
+        <% end %>
+
+        <% if @payment.check_reference_number.present? %>
+          <div>
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Check/Reference #</dt>
+            <dd class="mt-1 text-sm text-gray-900 dark:text-everforest-fg">
+              <%= @payment.check_reference_number %>
+            </dd>
+          </div>
+        <% end %>
+
+        <div>
+          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Status</dt>
+          <dd class="mt-1">
+            <% if @payment.paid %>
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:bg-opacity-30 dark:text-green-300">
+                Received
+              </span>
+            <% else %>
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:bg-opacity-30 dark:text-yellow-300">
+                Scheduled
+              </span>
+            <% end %>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
 </div>

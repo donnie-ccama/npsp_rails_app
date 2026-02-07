@@ -1,4 +1,10 @@
-<div>
-  <h1 class="font-bold text-4xl">RecurringDonations#new</h1>
-  <p>Find me in app/views/recurring_donations/new.html.erb</p>
+<% content_for :title, "New Recurring Donation - NPSP CRM" %>
+
+<div class="max-w-4xl mx-auto">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-everforest-fg">New Recurring Donation</h1>
+    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Set up a new sustainer or recurring gift</p>
+  </div>
+
+  <%= render 'form', recurring_donation: @recurring_donation %>
 </div>
