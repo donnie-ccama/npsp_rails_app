@@ -1,3 +1,5 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+/*
+ * Application-specific styles.
+ * Tailwind CSS is loaded separately via stylesheet_link_tag "tailwind".
+ * Add any custom, non-Tailwind styles below.
+ */
