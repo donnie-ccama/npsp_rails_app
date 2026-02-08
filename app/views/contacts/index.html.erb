@@ -29,14 +29,14 @@
       
       <div class="flex items-end">
         <label class="flex items-center">
-          <%= f.check_box :do_not_contact, {}, "1", nil, class: "h-4 w-4 text-magenta-600 focus:ring-magenta-500 border-gray-300 rounded" %>
+          <%= f.check_box :do_not_contact, { class: "h-4 w-4 text-magenta-600 focus:ring-magenta-500 border-gray-300 rounded" }, "1", nil %>
           <span class="ml-2 text-sm text-gray-900 dark:text-everforest-fg">Do Not Contact Only</span>
         </label>
       </div>
       
       <div class="flex items-end">
         <label class="flex items-center">
-          <%= f.check_box :deceased, {}, "1", nil, class: "h-4 w-4 text-magenta-600 focus:ring-magenta-500 border-gray-300 rounded" %>
+          <%= f.check_box :deceased, { class: "h-4 w-4 text-magenta-600 focus:ring-magenta-500 border-gray-300 rounded" }, "1", nil %>
           <span class="ml-2 text-sm text-gray-900 dark:text-everforest-fg">Deceased Only</span>
         </label>
       </div>
